@@ -30,7 +30,10 @@ public class Node {
 	public Node getSuffixLink() {
 		return suffixLink;
 	}
-
+	public ArrayList<Edge> getEdeEdges(){
+		return this.childEdges;
+	}
+	
 	public void setSuffixLink(Node suffixLink) {
 		this.suffixLink = suffixLink;
 	}
