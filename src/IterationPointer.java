@@ -10,7 +10,7 @@ public class IterationPointer {
 		pointer = node;
 	}
 
-	public Node getPointer(Node node) {
+	public Node getPointer() {
 		return pointer;
 	}
 

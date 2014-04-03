@@ -9,4 +9,7 @@ public class GlobalUpdate {
 	public void setValue(int value) {
 		this.value = value;
 	}
+	public void increment(){
+		this.value++;
+	}
 }

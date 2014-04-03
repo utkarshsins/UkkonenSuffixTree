@@ -1,3 +1,5 @@
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
 public class Edge {
 
 	private Node startNode;
@@ -15,6 +17,28 @@ public class Edge {
 
 	public void setEndNode(Node node) {
 		endNode = node;
+	}
+	public Node traverseUp()
+	{
+		return this.startNode;
+	}
+	public int getstartIndex(){
+		return this.startPosition;
+	}
+	public String getString(String original) throws Exception{
+		return original.substring(getstartIndex(),getEdgelength()+getstartIndex()); 
+	}
+	
+	public int getEdgelength() throws Exception
+	{
+		if (endPosition instanceof Integer)
+				return (Integer)endPosition -startPosition;
+		else if(endPosition instanceof GlobalUpdate) {
+			GlobalUpdate a=(GlobalUpdate) endPosition;
+			return a.getValue()-startPosition;
+		}
+		else throw new Exception();
+			
 	}
 
 }
