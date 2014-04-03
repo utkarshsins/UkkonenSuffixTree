@@ -30,4 +30,15 @@ public class Node {
 	public void setSuffixLink(Node suffixLink) {
 		this.suffixLink = suffixLink;
 	}
+
+	public Edge getEdgeForSymbol(char c) {
+		try {
+			return childEdges.get(Utils.getSymbolIndex(c));
+		} catch (Exception e) {
+			System.err.println("Invalid symbol - " + c);
+			System.exit(-1);
+		}
+
+		return null;
+	}
 }
