@@ -3,23 +3,28 @@ import java.util.ArrayList;
 public class Node {
 
 	private Edge parentEdge;
-	private ArrayList<Edge> childEdges;
+	private Edge childEdges[];
 	private Node suffixLink;
 	private int depth;
+	boolean leaf;
 
-	public Node() {
+	public Node(Node root) {
 		parentEdge = null;
-		childEdges = new ArrayList<Edge>(Utils.SYMBOL_SET_SIZE);
-		suffixLink = null;
+		childEdges = new Edge[Utils.SYMBOL_SET_SIZE];
+		suffixLink = root;
+		if(root==null)
+			suffixLink=this;
 		depth = 0; // number of chars preceeding it.
+		leaf=true;
 	}
 
-	public Node(Edge parentEdge) throws Exception {
+	public Node(Edge parentEdge, Node root) throws Exception {
 		this.parentEdge = parentEdge;
-		childEdges = new ArrayList<Edge>(Utils.SYMBOL_SET_SIZE);
-		suffixLink = null;
+		childEdges = new Edge[Utils.SYMBOL_SET_SIZE];
+		suffixLink = root;
 		depth = this.parentEdge.traverseUp().depth
 				+ this.parentEdge.getEdgelength();
+		leaf=true;
 	}
 
 	public void setParentEdge(Edge parentEdge) throws Exception {
@@ -33,7 +38,7 @@ public class Node {
 		return suffixLink;
 	}
 
-	public ArrayList<Edge> getEdeEdges() {
+	public Edge[] getEdeEdges() {
 		return this.childEdges;
 	}
 
@@ -43,7 +48,7 @@ public class Node {
 
 	public Edge getEdgeForSymbol(char c) {
 		try {
-			return childEdges.get(Utils.getSymbolIndex(c));
+			return childEdges[Utils.getSymbolIndex(c)];
 		} catch (Exception e) {
 			System.err.println("Invalid symbol - " + c);
 			System.exit(-1);
@@ -54,5 +59,9 @@ public class Node {
 
 	public int getDepth() {
 		return this.depth;
+	}
+	public void addOutgoingEdge(Edge e,char c){
+		int x=Utils.getSymbolIndex(c);
+		this.childEdges[x]=e;
 	}
 }

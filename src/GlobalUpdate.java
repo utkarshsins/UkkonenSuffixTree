@@ -5,6 +5,10 @@ public class GlobalUpdate {
 	public int getValue() {
 		return value;
 	}
+	public GlobalUpdate()
+	{
+		value=-1;
+	}
 
 	public void setValue(int value) {
 		this.value = value;

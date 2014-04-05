@@ -2,7 +2,7 @@ import java.io.PrintStream;
 
 public class MainInterface {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		if (args.length == 0) {
 			usage(System.out);

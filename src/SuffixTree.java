@@ -4,19 +4,26 @@ public class SuffixTree {
 
 	private Node root;
 
-	public SuffixTree(String text) {
+	public SuffixTree(String text) throws Exception {
 		this.text = text;
+		root=new Node(null);
 		createSuffixTree(text);
+		
 	}
 
-	private void createSuffixTree(String text) {
+	private void createSuffixTree(String text) throws Exception {
 		if (text != null) {
+			S_tree_fuctions func=new S_tree_fuctions(this.root);
+			
 			System.out.println("Generating suffix tree for : "
 					+ Utils.ellipsize(text));
 
 			Utils.Timer createTreeTimer = new Utils.Timer();
 
 			// Create Tree
+			for (int i=1;i<=this.text.length();i++){
+				func.Iteration(this.text,i);
+			}
 
 			createTreeTimer.stopAndPrint("Suffix tree created");
 
