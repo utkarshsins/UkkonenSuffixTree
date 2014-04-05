@@ -68,4 +68,18 @@ public class Edge {
 	}
 	
 
+	public int getEndPosition() {
+		if (endPosition instanceof Integer)
+			return ((Integer) endPosition).intValue();
+		else
+			return ((GlobalUpdate) endPosition).getValue();
+	}
+
+	public int getStartPosition() {
+		return startPosition;
+	}
+
+	public int getEdgeLength() {
+		return getEndPosition() - getStartPosition() + 1;
+	}
 }
