@@ -4,6 +4,12 @@ public class Utils {
 
 	public static final boolean SHOW_TIMINGS = true;
 
+	private static int ID_COUNTER = 1;
+
+	public static int nextNodeId() {
+		return ID_COUNTER++;
+	}
+
 	public static String ellipsize(String input) {
 		int maxCharacters = 20;
 		int charactersAfterEllipsis = 5;
@@ -50,11 +56,13 @@ public class Utils {
 
 		public void stopAndPrint(String prepend) {
 			stop();
+			print(prepend);
 		}
 
 		public void print(String prepend) {
-			System.out.println(prepend + " in " + (endTime - startTime)
-					+ " ns.");
+			System.out.println(prepend + " in "
+					+ ((float) ((endTime - startTime) / 1000) / 1000.0)
+					+ " ms.");
 		}
 	}
 }

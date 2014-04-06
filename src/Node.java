@@ -1,11 +1,10 @@
-import java.util.ArrayList;
-
 public class Node {
 
 	private Edge parentEdge;
 	private Edge childEdges[];
 	private Node suffixLink;
 	private int depth;
+	private int id;
 	boolean leaf;
 	private int start_min; // this will be index of string from where suffix will cover this node.
 	private int num_leaves; // number of leaves
@@ -14,10 +13,11 @@ public class Node {
 		parentEdge = null;
 		childEdges = new Edge[Utils.SYMBOL_SET_SIZE];
 		suffixLink = root;
-		if(root==null)
-			suffixLink=this;
+		if (root == null)
+			suffixLink = this;
 		depth = 0; // number of chars preceeding it.
-		leaf=true;
+		id = Utils.nextNodeId();
+		leaf = true;
 	}
 	
 
@@ -27,7 +27,8 @@ public class Node {
 		suffixLink = root;
 		depth = this.parentEdge.traverseUp().depth
 				+ this.parentEdge.getEdgelength();
-		leaf=true;
+		id = Utils.nextNodeId();
+		leaf = true;
 	}
 
 	public void setParentEdge(Edge parentEdge) throws Exception {
@@ -41,7 +42,7 @@ public class Node {
 		return suffixLink;
 	}
 
-	public Edge[] getEdeEdges() {
+	public Edge[] getEdges() {
 		return this.childEdges;
 	}
 	public Edge getParentEdge() {
@@ -69,9 +70,14 @@ public class Node {
 	public int getDepth() {
 		return this.depth;
 	}
-	public void addOutgoingEdge(Edge e,char c){
-		int x=Utils.getSymbolIndex(c);
-		this.childEdges[x]=e;
+
+	public int getID() {
+		return this.id;
+	}
+
+	public void addOutgoingEdge(Edge e, char c) {
+		int x = Utils.getSymbolIndex(c);
+		this.childEdges[x] = e;
 	}
 	public void set_numleaves_minstart(int numleaves,int minstart){
 		this.start_min=minstart;

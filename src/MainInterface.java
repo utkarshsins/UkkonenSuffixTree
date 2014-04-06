@@ -1,21 +1,53 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
+
+import javax.swing.JFileChooser;
+import javax.swing.UIManager;
 
 public class MainInterface {
 
 	public static void main(String[] args) throws Exception {
 
+		boolean input = true;
+
+		String text = "";
+
 		if (args.length == 0) {
 			usage(System.out);
-		} else if (args.length < 2) {
-			errUsage();
+			input = false;
+		} else
+			text = args[0];
+
+		if (!input) {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			JFileChooser fileChooser = new JFileChooser();
+			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				text = new BufferedReader(new InputStreamReader(
+						new FileInputStream(fileChooser.getSelectedFile())))
+						.readLine();
+				input = true;
+			}
 		}
 
-		String text = args[0];
-		String[] patterns = new String[args.length - 1];
-		for(int j=0;j<args.length-1;j++)
-			patterns[j]=args[j+1];
+		if (!input) {
+			System.out.print("Enter the text : ");
+			text = new BufferedReader(new InputStreamReader(System.in))
+					.readLine();
+		}
+
+		String[] patterns;
+		if (args.length > 0)
+			patterns = new String[args.length - 1];
+		else
+			patterns = new String[0];
 
 		SuffixTree suffixTree = new SuffixTree(text);
+
+		System.out.println();
+
+		suffixTree.print(System.out);
 
 		for (String pattern : patterns) {
 			suffixTree.search(pattern);

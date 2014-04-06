@@ -1,4 +1,4 @@
-import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
+import java.io.PrintStream;
 
 public class SuffixTree {
 
@@ -9,12 +9,12 @@ public class SuffixTree {
 	public SuffixTree(String text) throws Exception {
 		this.text = text;
 		root = new Node(null);
-		createSuffixTree(text);
+		createSuffixTree();
 		set_numberofleaves_startindex(root);
 
 	}
 
-	private void createSuffixTree(String text) throws Exception {
+	private void createSuffixTree() throws Exception {
 		if (text != null) {
 			S_tree_fuctions func = new S_tree_fuctions(this.root);
 
@@ -32,6 +32,42 @@ public class SuffixTree {
 
 		} else {
 			System.err.println("Text is null. Cannot create tree.");
+		}
+	}
+
+	public void print(PrintStream stream) {
+		printNode(root, stream);
+	}
+
+	private void printNode(Node node, PrintStream stream) {
+		stream.print(node.getID() + ":");
+
+		Edge[] edges = node.getEdges();
+
+		boolean first = true;
+		for (int i = 0; i < edges.length; i++) {
+
+			if (edges[i] == null)
+				continue;
+
+			if (!first)
+				stream.print(";");
+			else
+				first = false;
+
+			stream.print(edges[i].getStartPosition() + 1);
+			stream.print(" ");
+			stream.print(edges[i].getEndPosition() + 1);
+			stream.print(" ");
+			stream.print(edges[i].getendNode().getID());
+		}
+		stream.println();
+
+		for (int i = 0; i < edges.length; i++) {
+			if (edges[i] == null)
+				continue;
+
+			printNode(edges[i].getendNode(), stream);
 		}
 	}
 
@@ -95,8 +131,9 @@ public class SuffixTree {
 	public void set_numberofleaves_startindex(Node node) throws Exception {
 
 		if (node.leaf) {
-			node.set_numleaves_minstart(1,this.text.length()-( node.getParentEdge().getEdgelength()
-					+ node.getParentEdge().getstartNode().getDepth()));
+			node.set_numleaves_minstart(1, this.text.length()
+					- (node.getParentEdge().getEdgelength() + node
+							.getParentEdge().getstartNode().getDepth()));
 			return;
 		}
 
