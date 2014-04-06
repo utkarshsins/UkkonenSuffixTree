@@ -1,3 +1,5 @@
+import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
+
 public class SuffixTree {
 
 	private String text;
@@ -6,23 +8,24 @@ public class SuffixTree {
 
 	public SuffixTree(String text) throws Exception {
 		this.text = text;
-		root=new Node(null);
+		root = new Node(null);
 		createSuffixTree(text);
-		
+		set_numberofleaves_startindex(root);
+
 	}
 
 	private void createSuffixTree(String text) throws Exception {
 		if (text != null) {
-			S_tree_fuctions func=new S_tree_fuctions(this.root);
-			
+			S_tree_fuctions func = new S_tree_fuctions(this.root);
+
 			System.out.println("Generating suffix tree for : "
 					+ Utils.ellipsize(text));
 
 			Utils.Timer createTreeTimer = new Utils.Timer();
 
 			// Create Tree
-			for (int i=1;i<=this.text.length();i++){
-				func.Iteration(this.text,i);
+			for (int i = 1; i <= this.text.length(); i++) {
+				func.Iteration(this.text, i);
 			}
 
 			createTreeTimer.stopAndPrint("Suffix tree created");
@@ -56,7 +59,6 @@ public class SuffixTree {
 	}
 
 	private int getPatternPosition(String pattern) {
-		int position = -1;
 
 		int length = pattern.length();
 		int counter = 0;
@@ -65,7 +67,6 @@ public class SuffixTree {
 
 		while (counter < length) {
 			Edge edge = node.getEdgeForSymbol(pattern.charAt(counter));
-
 			// If edge is not null only then further search is possible
 			if (edge != null) {
 
@@ -78,18 +79,41 @@ public class SuffixTree {
 						edgePosition++;
 						counter++;
 					} else
-						break;
+						return -1;
 				}
-
-				if (edgePosition > edgeEnd)
-					counter++;
-				else
-					break;
+				if (counter == length)
+					return edge.getendNode().getMinStartIndex();
 
 			} else
-				break;
+				return -1;
+
+			node = edge.getendNode();
+		}
+		return -1;
+	}
+
+	public void set_numberofleaves_startindex(Node node) throws Exception {
+
+		if (node.leaf) {
+			node.set_numleaves_minstart(1,this.text.length()-( node.getParentEdge().getEdgelength()
+					+ node.getParentEdge().getstartNode().getDepth()));
+			return;
 		}
 
-		return position;
+		int limit = Utils.SYMBOL_SET_SIZE;
+		int numleaves = 0;
+		int min_start = this.text.length();
+		Edge e;
+		for (int i = 0; i < limit; i++) {
+			e = node.getEdgeForIndex(i);
+			if (e == null)
+				continue;
+			set_numberofleaves_startindex(e.getendNode());
+			numleaves += e.getendNode().getNumLeaves();
+			if (min_start > e.getendNode().getMinStartIndex())
+				min_start = e.getendNode().getMinStartIndex();
+		}
+		node.set_numleaves_minstart(numleaves, min_start);
 	}
+
 }

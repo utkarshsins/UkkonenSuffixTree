@@ -7,6 +7,8 @@ public class Node {
 	private Node suffixLink;
 	private int depth;
 	boolean leaf;
+	private int start_min; // this will be index of string from where suffix will cover this node.
+	private int num_leaves; // number of leaves
 
 	public Node(Node root) {
 		parentEdge = null;
@@ -17,6 +19,7 @@ public class Node {
 		depth = 0; // number of chars preceeding it.
 		leaf=true;
 	}
+	
 
 	public Node(Edge parentEdge, Node root) throws Exception {
 		this.parentEdge = parentEdge;
@@ -41,6 +44,9 @@ public class Node {
 	public Edge[] getEdeEdges() {
 		return this.childEdges;
 	}
+	public Edge getParentEdge() {
+		return this.parentEdge;
+	}
 
 	public void setSuffixLink(Node suffixLink) {
 		this.suffixLink = suffixLink;
@@ -56,6 +62,9 @@ public class Node {
 
 		return null;
 	}
+	public Edge getEdgeForIndex(int i){
+		return childEdges[i];
+	}
 
 	public int getDepth() {
 		return this.depth;
@@ -63,5 +72,15 @@ public class Node {
 	public void addOutgoingEdge(Edge e,char c){
 		int x=Utils.getSymbolIndex(c);
 		this.childEdges[x]=e;
+	}
+	public void set_numleaves_minstart(int numleaves,int minstart){
+		this.start_min=minstart;
+		this.num_leaves=numleaves;
+	}
+	public int getNumLeaves(){
+		return this.num_leaves;
+	}
+	public int getMinStartIndex(){
+		return this.start_min;
 	}
 }

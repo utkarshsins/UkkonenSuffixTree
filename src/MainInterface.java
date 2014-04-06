@@ -12,6 +12,8 @@ public class MainInterface {
 
 		String text = args[0];
 		String[] patterns = new String[args.length - 1];
+		for(int j=0;j<args.length-1;j++)
+			patterns[j]=args[j+1];
 
 		SuffixTree suffixTree = new SuffixTree(text);
 

@@ -2,11 +2,13 @@
 public class ExtensionReturnObject {
 	private Edge edgecur;
 	private int offset;
-	boolean EVENT3;
-	public ExtensionReturnObject(Edge e,int offset, boolean event3){
+	private boolean EVENT3;
+	private boolean InternalNodeCreated;
+	public ExtensionReturnObject(Edge e,int offset, boolean event3,boolean internalnodecreated){
 		this.edgecur=e;
 		this.offset=offset;
 		this.EVENT3=event3;
+		this.InternalNodeCreated=internalnodecreated;
 	}
 	public Edge getEdge(){
 		return edgecur;
@@ -17,6 +19,9 @@ public class ExtensionReturnObject {
 	}
 	public boolean isEvent3(){
 		return this.EVENT3;
+	}
+	public boolean isInternalNodeCreated(){
+		return this.InternalNodeCreated;
 	}
 
 }

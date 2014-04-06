@@ -65,7 +65,7 @@ public class Edge {
 		router.addOutgoingEdge(routerToEndNode, c_new_edge);
 		this.endNode=router;
 		this.endPosition=this.startPosition+index;		
-		router.setSuffixLink(this.startNode.getSuffixLink());		
+		//router.setSuffixLink(this.startNode.getSuffixLink());		
 		router.setParentEdge(this);// this has to be done after modifying edge, otherwise depth will be set wrong.
 		endnode_old.setParentEdge(routerToEndNode);// for setting depth correctly
 		return routerToEndNode;
