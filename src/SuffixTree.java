@@ -1,3 +1,5 @@
+import java.io.PrintStream;
+
 public class SuffixTree {
 
 	private String text;
@@ -6,29 +8,65 @@ public class SuffixTree {
 
 	public SuffixTree(String text) throws Exception {
 		this.text = text;
-		root=new Node(null);
-		createSuffixTree(text);
-		
+		root = new Node(null);
+		createSuffixTree();
+
 	}
 
-	private void createSuffixTree(String text) throws Exception {
+	private void createSuffixTree() throws Exception {
 		if (text != null) {
-			S_tree_fuctions func=new S_tree_fuctions(this.root);
-			
+			S_tree_fuctions func = new S_tree_fuctions(this.root);
+
 			System.out.println("Generating suffix tree for : "
 					+ Utils.ellipsize(text));
 
 			Utils.Timer createTreeTimer = new Utils.Timer();
 
 			// Create Tree
-			for (int i=1;i<=this.text.length();i++){
-				func.Iteration(this.text,i);
+			for (int i = 1; i <= this.text.length(); i++) {
+				func.Iteration(this.text, i);
 			}
 
 			createTreeTimer.stopAndPrint("Suffix tree created");
 
 		} else {
 			System.err.println("Text is null. Cannot create tree.");
+		}
+	}
+
+	public void print(PrintStream stream) {
+		printNode(root, stream);
+	}
+
+	private void printNode(Node node, PrintStream stream) {
+		stream.print(node.getID() + ":");
+
+		Edge[] edges = node.getEdges();
+
+		boolean first = true;
+		for (int i = 0; i < edges.length; i++) {
+
+			if (edges[i] == null)
+				continue;
+
+			if (!first)
+				stream.print(";");
+			else
+				first = false;
+
+			stream.print(edges[i].getStartPosition() + 1);
+			stream.print(" ");
+			stream.print(edges[i].getEndPosition() + 1);
+			stream.print(" ");
+			stream.print(edges[i].getendNode().getID());
+		}
+		stream.println();
+
+		for (int i = 0; i < edges.length; i++) {
+			if (edges[i] == null)
+				continue;
+
+			printNode(edges[i].getendNode(), stream);
 		}
 	}
 
