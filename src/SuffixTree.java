@@ -6,6 +6,9 @@ public class SuffixTree {
 
 	private Node root;
 
+	public static int node_count = 0;
+	public static int edge_count = 0;
+
 	public SuffixTree(String text) throws Exception {
 		this.text = text;
 		root = new Node(null);
@@ -36,10 +39,14 @@ public class SuffixTree {
 	}
 
 	public void print(PrintStream stream) {
+		node_count = 0;
+		edge_count = 0;
 		printNode(root, stream);
 	}
 
 	private void printNode(Node node, PrintStream stream) {
+		node_count++;
+
 		stream.print(node.getID() + ":");
 
 		Edge[] edges = node.getEdges();
@@ -66,6 +73,9 @@ public class SuffixTree {
 		for (int i = 0; i < edges.length; i++) {
 			if (edges[i] == null)
 				continue;
+			else {
+				edge_count++;
+			}
 
 			printNode(edges[i].getendNode(), stream);
 		}

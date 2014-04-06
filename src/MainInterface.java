@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -45,9 +46,22 @@ public class MainInterface {
 
 		SuffixTree suffixTree = new SuffixTree(text);
 
-		System.out.println();
+		{
+			JFileChooser fileChooser = new JFileChooser();
+			if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+				File outputFile = fileChooser.getSelectedFile();
+				PrintStream fileStream = new PrintStream(outputFile);
+				suffixTree.print(fileStream);
+				fileStream.close();
+			} else {
+				System.out.println();
+				suffixTree.print(System.out);
+			}
+		}
 
-		suffixTree.print(System.out);
+		System.out.println();
+		System.out.println("Node Count : " + SuffixTree.node_count);
+		System.out.println("Edge Count : " + SuffixTree.edge_count);
 
 		for (String pattern : patterns) {
 			suffixTree.search(pattern);
