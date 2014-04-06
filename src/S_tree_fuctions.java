@@ -33,7 +33,7 @@ public class S_tree_fuctions {
 		ExtensionReturnObject endobj;
 		
 		
-		while (obj != null && index >2) {
+		while (obj != null && index >2 && !obj.isEvent3()) {
 			endobj = Extension(obj.getEdge(), obj.getOffset(), itpointer, currentprefix,
 					glblupdate);
 			if (endobj != null) {
@@ -63,7 +63,7 @@ public class S_tree_fuctions {
 						==(edgestString.charAt(stringtotravel.length()-1))) {
 					itpointer.setPointer(traveledge.traverseUp(),
 							stringtotravel.length());
-					return null; // event 3 has happened.
+					return new ExtensionReturnObject(traveledge, 0, true); // event 3 has happened., offset is irrelevant.
 				}
 				
 				Edge routerToOldChild = traveledge.partitionEdge(stringtotravel
@@ -76,7 +76,7 @@ public class S_tree_fuctions {
 				routerToOldChild.getstartNode().addOutgoingEdge(routerToLeaf, stringtotravel.charAt(stringtotravel.length() - 1));
 				leaf.setParentEdge(routerToLeaf);
 				itpointer.setPointer(this.root,0); // it can be done as event 3 will occur only after this. If it doesn't happen then also  we are good.
-				return new ExtensionReturnObject(routerToLeaf, routerToLeaf.getEdgelength());
+				return new ExtensionReturnObject(routerToLeaf, routerToLeaf.getEdgelength(),false);
 
 			} else {
 				node = traveledge.getendNode();
@@ -90,7 +90,7 @@ public class S_tree_fuctions {
 		Edge traveleEdge = node.getEdgeForSymbol(stringtotravel.charAt(stringtotravel.length()-1));
 		if (traveleEdge != null) {
 			itpointer.setPointer(node, 1);
-			return null;
+			return new ExtensionReturnObject(traveleEdge, 0, true); // event 3 has happened, offset is irrelvant
 		}
 
 		traveleEdge=parentedge;
@@ -110,7 +110,7 @@ public class S_tree_fuctions {
 				node.addOutgoingEdge(traveleEdge, stringtotravel.charAt(0));
 				endnode.setParentEdge(traveleEdge);
 			}
-			obj=new ExtensionReturnObject(traveleEdge,traveleEdge.getEdgelength());
+			obj=new ExtensionReturnObject(traveleEdge,traveleEdge.getEdgelength(),false);
 			return obj;
 
 		}
@@ -122,7 +122,7 @@ public class S_tree_fuctions {
 		leaf.setParentEdge(routerToLeaf);
 		
 
-		return new ExtensionReturnObject(routerToLeaf, 1);
+		return new ExtensionReturnObject(routerToLeaf, 1,false);
 	}
 
 	// index is number of characters preceeding cur position including cur
