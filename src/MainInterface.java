@@ -25,9 +25,12 @@ public class MainInterface {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			JFileChooser fileChooser = new JFileChooser();
 			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-				text = new BufferedReader(new InputStreamReader(
-						new FileInputStream(fileChooser.getSelectedFile())))
-						.readLine();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(new FileInputStream(
+								fileChooser.getSelectedFile())));
+				reader.readLine(); // ignore
+				text = reader.readLine();
+				reader.close();
 				input = true;
 			}
 		}
@@ -37,6 +40,8 @@ public class MainInterface {
 			text = new BufferedReader(new InputStreamReader(System.in))
 					.readLine();
 		}
+
+		text += "$";
 
 		String[] patterns;
 		if (args.length > 0)

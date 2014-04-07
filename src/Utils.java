@@ -1,6 +1,6 @@
 public class Utils {
 
-	public static final int SYMBOL_SET_SIZE = 36;
+	public static final int SYMBOL_SET_SIZE = 26 + 10 + 1;
 
 	public static final boolean SHOW_TIMINGS = true;
 
@@ -28,15 +28,18 @@ public class Utils {
 			return (int) c - (int) '0';
 		else if (c >= 'a' && c <= 'z')
 			return (int) c - (int) 'a' + 10;
-		else
-			return -1;
+		else if (c == '$')
+			return (int) c - (int) '$' + 10 + 26;
+		return -1;
 	}
 
 	public static char getIndexSymbox(int i) {
 		if (i >= 0 && i <= 9)
 			return (char) ((int) '0' + i);
-		else if (i >= 10 && i <= 36)
-			return (char) (i + (int) 'a');
+		else if (i >= 10 && i < 36)
+			return (char) (i - 10 + (int) 'a');
+		else if (i == 36)
+			return '$';
 		else
 			return (char) 0;
 	}

@@ -62,6 +62,8 @@ public class SuffixTree {
 			else
 				first = false;
 
+			stream.print(Utils.getIndexSymbox(i));
+			stream.print(" ");
 			stream.print(edges[i].getStartPosition() + 1);
 			stream.print(" ");
 			stream.print(edges[i].getEndPosition() + 1);

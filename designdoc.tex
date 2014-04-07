@@ -1,0 +1,95 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{comment}
+\title{CSL758 Project \\Suffix Tree Implementation \\Ukkonen's Algorithm \\Design Document}
+
+\author{Ashesh 2010CS50276 \\ Utkarsh 2010CS50299}
+
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Interface}
+\subsection {Input}
+Input can be given to the suffix tree implementation in one of the three ways:
+\begin{itemize}
+\item Command Line : Input text and search patterns can be provided as command line arguments when running the implementation \begin{itemize}
+\item USAGE : UkkonenSuffixTree [text] [pattern1] [pattern2] [pattern3] ...
+\end{itemize}
+\item File Chooser Dialog : If no command line argument was passed, a file chooser dialog will open where an input file can be selected. The first line of the input file is ignored as metadata. The second line's text is taken and the corresponding suffix tree is generated. 
+\item Standard Input : If file chooser dialog was cancelled without giving any input file, then the program will prompt you to give an input text using standard input device.
+\end{itemize}
+
+\subsection {Output}
+Output generated is a representation of the tree using adjacency lists. The format for the adjacency list followed is: \newline \newline
+nodeid:ch1 start1 end1 nodeid1;ch2 start2 end2 nodeid2
+\begin{itemize}
+\item File Output : Once the tree has been generated, a file chooser dialog box opens up where the output file can be specified.
+\item Standard Output : If no output file is specified and the dialog box is cancelled, the implementation writes the output to the standard output device.
+\end{itemize}
+
+
+\section{Data Structures}
+\subsection {Node}
+This corrosponds to the nodes in the suffix tree.
+Following are members with brief description: 
+\begin{itemize}
+\item Edge parentedge
+\item Edge [ ]childedges 
+\item Node suffixlink
+\item int depth : This is number of characters present in path from root to this node.
+\item int start\_min : this is the minimum starting index of a suffix in original text string, whose corrosponding path in the tree passes through though this node.
+\item int num\_leaves : this is number of leaves in the subtree rooted at the node.
+
+\end{itemize}
+\subsection{Edge}
+This corrosponds to an edge in the tree.
+\begin{itemize}
+\item Node startNode : Start Node of the edge
+\item Node EndNode : End node of the edge
+\item int startPosition : index in the original string where the string corrosponding to edge begins
+\item Object EndPosition : this points to index in original string where the string corrosponding to egde finishes. It has type Object so as to make multiple edges have same end point index.
+\end{itemize}
+\subsection{GlobalUpdate}
+\begin{itemize}
+\item value : This is the value of the iteration index of the iteration operation. It is pointed to by all edges' EndPosition whose end position is updated in constant time.
+\end{itemize}
+\subsection{ExtensionReturnObject}
+This data structure is the return value of the extension operation. This is used in creating suffix links, and to perform next extension.
+\begin{itemize}
+\item Egde edgecur: The egde on which the Extension has ended. (Extension always ends at some egde.)
+\item int offset : This is the number of characters in edgecur including the character where the extension has ended.
+\item boolean EVENT3: This denotes whether EVENT 3 happened in the extension or not. ( Event 3 is the event when no addition of character happen in an extension).
+\item boolean InternalNodeCreated: This denotes whether internal node has been created during the extension. It is used to create suffix link for the new node created.
+\end{itemize}
+\subsection{IterationPointer}
+\begin{itemize}
+\item Node pointer : This is the node where the first Extension will happen. This is the node where the first EVENT 3 happened in last iteration.
+\item int offset : This is the offset in the edge where the first (and the only )EVENT 3 took place in last iteration.
+\end{itemize}
+\section{Logical Structure}
+\begin{itemize}
+\item {\it Iteration(String treestring, int index)} is called from the top interface which does the ITERATION operation. This fuction calls {\it Extension(Edge curedge, int index, IterationPointer itpointer, String iterationstring, GlobalUpdate glblupdate,boolean prevNodeCreated)} .
+\begin{itemize}
+\item If new internal node was created in previous extension. It creates suffix link of that node using the output of the current extension operation.
+\item if in the current Extension, EVENT 3 has occured, then it simply returns.
+\item This function also increments value of GlobalUpdate every time it is called which essentially means the constant time addition of the character in tree for certain set of edges.
+\end{itemize}
+\item {\it Extension(Edge curedge, int index, IterationPointer itpointer, String iterationstring, GlobalUpdate glblupdate,boolean prevNodeCreated)} : This fuction takes as input the ending edge of previous extension. 
+\begin {itemize}
+\item If a new node was not created in previous iteration, then it take the suffix link of the parent node of the edge and calls {\it TraverseDown(Node node, String stringtotravel, String Original, IterationPointer itpointer, GlobalUpdate glblupdate)} . 
+\item Otherwise, it goes to suffix link node of parent node of the startnode of the edge and calls the same function.
+\end{itemize}
+\item {\it TraverseDown(Node node, String stringtotravel, String Original, IterationPointer itpointer, GlobalUpdate glblupdate)} : This fuction traversed down the tree starting from {\it node} and it traverses string {\it stringtotravel} . 
+\begin{itemize}
+\item When there doesn't exist edges corrosponding to characters in the string, it adds new leafs,internal nodes or extends edges whenever necessary.
+\item It returns the edge where the traversal ended along with the information that whether EVENT 3 happened or not.
+\item This function updates {\it iterationpointer} which is the node where the first extention of the iteration starts. Whenever EVENT 3 happens, it sets the pointer to the startnode of the edge.
+\end{itemize} 
+\end{itemize}
+\end{document}
